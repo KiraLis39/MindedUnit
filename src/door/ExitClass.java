@@ -1,7 +1,7 @@
 package door;
 
-import fox.adds.Out;
 
+import fox.Out;
 
 public class ExitClass {
 	public static void Exit(int exitCode) {

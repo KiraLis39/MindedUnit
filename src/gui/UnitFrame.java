@@ -21,7 +21,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Random;
-
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -32,8 +31,8 @@ import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 import core.Events.ColEvent;
 import door.ExitClass;
-import fox.adds.Out;
-import fox.builders.ResourceManager;
+import fox.Out;
+import fox.ResourceCache;
 import library.TechClassUNames;
 import unit.Unit;
 import unit.Units.Gender;
@@ -213,10 +212,10 @@ public class UnitFrame extends JFrame implements WindowListener {
 							setBackground(Color.DARK_GRAY);
 							setBorder(new EmptyBorder(0, 2, 0, 2));
 							
-							add(new JButton() {{setPreferredSize(new Dimension(32, 32)); setIcon(new ImageIcon(ResourceManager.getBufferedImage("buttonIcon00"))); setToolTipText("00"); setFocusPainted(false); setBackground(null); setBorderPainted(false);}});
-							add(new JButton() {{setPreferredSize(new Dimension(32, 32)); setIcon(new ImageIcon(ResourceManager.getBufferedImage("buttonIcon01"))); setToolTipText("01"); setFocusPainted(false); setBackground(null); setBorderPainted(false);}});
-							add(new JButton() {{setPreferredSize(new Dimension(32, 32)); setIcon(new ImageIcon(ResourceManager.getBufferedImage("buttonIcon02"))); setToolTipText("02"); setFocusPainted(false); setBackground(null); setBorderPainted(false);}});
-							add(new JButton() {{setPreferredSize(new Dimension(32, 32)); setIcon(new ImageIcon(ResourceManager.getBufferedImage("buttonIcon03"))); setToolTipText("03"); setFocusPainted(false); setBackground(null); setBorderPainted(false);}});
+							add(new JButton() {{setPreferredSize(new Dimension(32, 32)); setIcon(new ImageIcon(ResourceCache.getBImage("buttonIcon00"))); setToolTipText("00"); setFocusPainted(false); setBackground(null); setBorderPainted(false);}});
+							add(new JButton() {{setPreferredSize(new Dimension(32, 32)); setIcon(new ImageIcon(ResourceCache.getBImage("buttonIcon01"))); setToolTipText("01"); setFocusPainted(false); setBackground(null); setBorderPainted(false);}});
+							add(new JButton() {{setPreferredSize(new Dimension(32, 32)); setIcon(new ImageIcon(ResourceCache.getBImage("buttonIcon02"))); setToolTipText("02"); setFocusPainted(false); setBackground(null); setBorderPainted(false);}});
+							add(new JButton() {{setPreferredSize(new Dimension(32, 32)); setIcon(new ImageIcon(ResourceCache.getBImage("buttonIcon03"))); setToolTipText("03"); setFocusPainted(false); setBackground(null); setBorderPainted(false);}});
 						}
 					};
 					
@@ -247,7 +246,7 @@ public class UnitFrame extends JFrame implements WindowListener {
 		unitsDrawThread = new Thread(new Runnable() {
 			@Override
 			public synchronized void run() {
-				Out.Console("unitsDrawThread start...");
+				Out.Print("unitsDrawThread start...");
 
 				while (active) {
 					if (UDB0 == null) {return;}
@@ -315,7 +314,7 @@ public class UnitFrame extends JFrame implements WindowListener {
 		timerProcessThread = new Thread(new Runnable() {
 			@Override
 			public void run() {
-				Out.Console("processThread start...");
+				Out.Print("processThread start...");
 				
 				while (active) {
 					timeMillisNow = System.currentTimeMillis() - timeMillisWas;
@@ -421,7 +420,7 @@ public class UnitFrame extends JFrame implements WindowListener {
 	}
 	
 	public static void destroyUnit(Unit unitToDestroy) {
-		Out.Console("UnitFrame: destroyUnit: removing unit ID:" + unitToDestroy.getID() + " >> " + unitToDestroy.getName());
+		Out.Print("UnitFrame: destroyUnit: removing unit ID:" + unitToDestroy.getID() + " >> " + unitToDestroy.getName());
 		UDB0.remove(unitToDestroy.getID());
 	}
 
@@ -446,7 +445,7 @@ public class UnitFrame extends JFrame implements WindowListener {
 			return;
 		}
 		
-		Out.Console("\nCreating new child here...");
+		Out.Print("\nCreating new child here...");
 		
 		int sexRandInt = universalRand.nextInt(1);
 		int hpRandInt = universalRand.nextInt(50) + 50;

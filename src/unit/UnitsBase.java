@@ -6,9 +6,7 @@ import java.awt.geom.Point2D;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Random;
-
 import core.interfaces.Collable;
-import kuusisto.tinysound.TinySound;
 
 
 public abstract class UnitsBase implements Units, Collable {
@@ -27,11 +25,12 @@ public abstract class UnitsBase implements Units, Collable {
 	protected Boolean DESTROYED = false;
 	
 	protected UnitsBase() {
-		TinySound.init();
 		universalRandom = new Random();
 	}
 	
-	public void say(File sound) {TinySound.loadSound(sound).play();}
+	public void say(File sound) {
+		TinySound.loadSound(sound).play();
+	}
 	
 	//identification number:
 	protected int ID;

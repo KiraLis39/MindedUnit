@@ -6,14 +6,15 @@ import java.awt.geom.Ellipse2D;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.util.Random;
+
+import com.harium.etyl.sound.MultimediaLoader;
+import com.harium.etyl.sound.model.Sound;
 import core.Events.ColEvent;
 import core.interfaces.Collable;
 import enums.MediaConst;
-import fox.adds.Out;
-import fox.builders.ResourceManager;
+import fox.Out;
+import fox.ResourceCache;
 import gui.UnitFrame;
-import kuusisto.tinysound.Sound;
-import kuusisto.tinysound.TinySound;
 import library.TechClassUNames;
 
 
@@ -24,13 +25,13 @@ public class Unit extends UnitsBase {
 	Boolean inCollision = false;
 	Color auraColor = new Color(0.0f, 1.0f, 0.3f, 0.5f);
 	Sound defaultSound, dieSound, hurtSound;
-	
+	MultimediaLoader mml = new MultimediaLoader();
 	
 	private Unit() {
 		NAME = TechClassUNames.newFemaName();
 		ID = universalRandom.nextInt(100);
 		familyStamp = Math.abs(universalRandom.nextLong());
-		Out.Console("\nCreating random parent " + NAME + " (ID:" + ID + "); familyStamp: " + familyStamp);
+		Out.Print("\nCreating random parent " + NAME + " (ID:" + ID + "); familyStamp: " + familyStamp);
 	}
 	
 	public Unit(int id, String name, short credentialsLevel, Unit unit0, Unit unit1) {
@@ -88,16 +89,20 @@ public class Unit extends UnitsBase {
 	public void onCreate() {
 		rVector = new Random();
 		rDistance = new Random();
-		
-		dieSound = TinySound.loadSound(ResourceManager.getFilesLink(MediaConst.dieVoiceUnitSound.name()));
-		defaultSound = TinySound.loadSound(ResourceManager.getFilesLink(MediaConst.defaultVoiceUnitSound.name()));
-		hurtSound = TinySound.loadSound(ResourceManager.getFilesLink(MediaConst.hurtVoiceUnitSound.name()));
+
+		dieSound = new Sound(ResourceCache.getFile(MediaConst.dieVoiceUnitSound.name()).toString());
+		defaultSound = new Sound(ResourceCache.getFile(MediaConst.defaultVoiceUnitSound.name()).toString());
+		hurtSound = new Sound(ResourceCache.getFile(MediaConst.hurtVoiceUnitSound.name()).toString());
+
+		mml.loadSound(dieSound.getPath());
+		mml.loadSound(defaultSound.getPath());
+		mml.loadSound(hurtSound.getPath());
 		
 		unitBody = new Ellipse2D.Double(centerPoint.getX() - WIDTH / 2, centerPoint.getY() - HEIGHT / 2, WIDTH, HEIGHT);
 		unitAura = new Ellipse2D.Double(centerPoint.getX() - WIDTH / 2 - 2, centerPoint.getY() - HEIGHT / 2 - 2, WIDTH + 4, HEIGHT + 4);
 	
-		Out.Console("Unit: " + NAME + " (ID:" + ID + ") was created!");
-		Out.Console("His parents is: " + mother.NAME + " as Mother, " + father.NAME + " as Father.\n");
+		Out.Print("Unit: " + NAME + " (ID:" + ID + ") was created!");
+		Out.Print("His parents is: " + mother.NAME + " as Mother, " + father.NAME + " as Father.\n");
 	}
 	
 	@Override
@@ -146,13 +151,13 @@ public class Unit extends UnitsBase {
 	@Override
 	public void onIncomeDamage() {
 		if (HP > 0) {
-			hurtSound.play(0.02D);
+			hurtSound.play();
 			HP--;
 		} else {onDie();}		
 	}
 
 	@Override
-	public void say() {defaultSound.play(0.05D);}
+	public void say() {defaultSound.play();}
 	
 	
 	@Override
@@ -161,13 +166,13 @@ public class Unit extends UnitsBase {
 		if (HP > 0) {throw new RuntimeException("Unit: destroy: HP > 0, but unit is die?..");}
 		
 		DESTROYED = true;
-		dieSound.play(1.0D);
+		dieSound.play();
 
 		destroy();
 	}
 
 	private void destroy() {
-		Out.Console("Unit " + getName() + " is dead now...");
+		Out.Print("Unit " + getName() + " is dead now...");
 		closeMemory();
 
 //		Удаление данных с БД.
@@ -242,11 +247,11 @@ public class Unit extends UnitsBase {
 				}
 			}
 		} else if (event.collisionType().equals(CollableType.CONSTRUCTION)) {
-			Out.Console("Unit: onCollision: methode 1 CONSTRUCTION");
+			Out.Print("Unit: onCollision: methode 1 CONSTRUCTION");
 		} else if (event.collisionType().equals(CollableType.GROUND)) {
-			Out.Console("Unit: onCollision: methode 1 GROUND");
+			Out.Print("Unit: onCollision: methode 1 GROUND");
 		} else {
-			Out.Console("Unit: onCollision: methode 1 NONE");
+			Out.Print("Unit: onCollision: methode 1 NONE");
 			throw new RuntimeException("UNKNOWN COLLIZION TYPE in Unit:onCollision():");
 		}
 	}
